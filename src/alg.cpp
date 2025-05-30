@@ -1,12 +1,12 @@
 // Copyright 2021 NNTU-CS
-#include "bst.h"
-
 #include <fstream>
 #include <string>
 #include <cctype>
 #include <vector>
 #include <algorithm>
 #include <iostream>
+
+#include "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
   std::ifstream file(filename);
@@ -23,13 +23,12 @@ void makeTree(BST<std::string>& tree, const char* filename) {
       word += std::tolower(ch);
     } else if (!word.empty()) {
       tree.insert(word);
-      word.clear();  // важно!
+      word.clear();
     }
   }
 
   if (!word.empty()) {
     tree.insert(word);
-    word.clear();
   }
 
   file.close();
