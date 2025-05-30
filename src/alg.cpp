@@ -15,6 +15,7 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     return;
   }
 
+  std::map<std::string, int> freq;
   std::string word;
   char ch;
 
@@ -22,37 +23,28 @@ void makeTree(BST<std::string>& tree, const char* filename) {
     if (std::isalpha(static_cast<unsigned char>(ch))) {
       word += std::tolower(ch);
     } else if (!word.empty()) {
-      tree.insert(word);
+      freq[word]++;
       word.clear();
     }
   }
 
   if (!word.empty()) {
-    tree.insert(word);
+    freq[word]++;
   }
 
   file.close();
-}
 
-void printFreq(BST<std::string>& tree) {
-  std::vector<std::pair<std::string, int>> words;
-  tree.getAllWords(words);
+  std::vector<std::pair<std::string, int>> sorted_words(freq.begin(), freq.end());
 
-  std::sort(words.begin(), words.end(),
-            [](const auto& a, const auto& b) {
-              return a.second > b.second;
-            });
+  std::function<void(int, int)> insertBalanced = [&](int left, int right) {
+    if (left > right) return;
+    int mid = left + (right - left) / 2;
+    for (int i = 0; i < sorted_words[mid].second; ++i) {
+      tree.insert(sorted_words[mid].first);
+    }
+    insertBalanced(left, mid - 1);
+    insertBalanced(mid + 1, right);
+  };
 
-  std::ofstream out("result/freq.txt");
-  if (!out) {
-    std::cerr << "Cannot open result/freq.txt" << std::endl;
-    return;
-  }
-
-  for (const auto& [word, count] : words) {
-    std::cout << word << ": " << count << std::endl;
-    out << word << ": " << count << std::endl;
-  }
-
-  out.close();
+  insertBalanced(0, sorted_words.size() - 1);
 }
