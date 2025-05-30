@@ -5,6 +5,8 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <map>
+#include <functional>
 
 #include "bst.h"
 
@@ -47,4 +49,27 @@ void makeTree(BST<std::string>& tree, const char* filename) {
   };
 
   insertBalanced(0, sorted_words.size() - 1);
+}
+
+void printFreq(BST<std::string>& tree) {
+  std::vector<std::pair<std::string, int>> words;
+  tree.getAllWords(words);
+
+  std::sort(words.begin(), words.end(),
+            [](const auto& a, const auto& b) {
+              return a.second > b.second;
+            });
+
+  std::ofstream out("result/freq.txt");
+  if (!out.is_open()) {
+    std::cerr << "Cannot open result/freq.txt" << std::endl;
+    return;
+  }
+
+  for (const auto& [word, count] : words) {
+    std::cout << word << ": " << count << std::endl;
+    out << word << ": " << count << std::endl;
+  }
+
+  out.close();
 }
