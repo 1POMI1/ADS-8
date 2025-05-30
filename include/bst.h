@@ -1,6 +1,6 @@
 // Copyright 2021 NNTU-CS
-#ifndef BST_H
-#define BST_H
+#ifndef INCLUDE_BST_H_
+#define INCLUDE_BST_H_
 
 #include <iostream>
 #include <string>
@@ -14,7 +14,7 @@ class BST {
         int count;
         Node* left;
         Node* right;
-        Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
+        explicit Node(const T& k) : key(k), count(1), left(nullptr), right(nullptr) {}
     };
 
     Node* root;
@@ -57,7 +57,7 @@ class BST {
         delete node;
     }
 
-public:
+ public:
     BST() : root(nullptr) {}
     ~BST() { clear(root); }
 
@@ -67,4 +67,4 @@ public:
     void getAllWords(std::vector<std::pair<T, int>>& out) const { inorder(root, out); }
 };
 
-#endif // INCLUDE_BST_H_
+#endif  // INCLUDE_BST_H_
