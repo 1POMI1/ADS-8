@@ -1,16 +1,16 @@
 // Copyright 2021 NNTU-CS
+#include "bst.h"
 #include <fstream>
-#include <cctype>
 #include <string>
+#include <cctype>
 #include <vector>
 #include <algorithm>
 #include <iostream>
-#include  "bst.h"
 
 void makeTree(BST<std::string>& tree, const char* filename) {
     std::ifstream file(filename);
-    if (!file) {
-        std::cerr << "File error!" << std::endl;
+    if (!file.is_open()) {
+        std::cerr << "File error! Cannot open: " << filename << std::endl;
         return;
     }
 
