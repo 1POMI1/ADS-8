@@ -17,21 +17,26 @@ void makeTree(BST<std::string>& tree, const char* filename) {
 
   std::string word;
   char ch;
+  int word_count = 0;
 
   while (file.get(ch)) {
     if (std::isalpha(static_cast<unsigned char>(ch))) {
       word += std::tolower(static_cast<unsigned char>(ch));
-    } else if (!word.empty()) {
-      tree.insert(word);
-      word.clear();
+    } else {
+      if (!word.empty()) {
+        tree.insert(word);
+        if (++word_count <= 10) std::cout << "Inserted word: " << word << std::endl;
+        word.clear();
+      }
     }
   }
-
   if (!word.empty()) {
     tree.insert(word);
+    if (++word_count <= 10) std::cout << "Inserted word: " << word << std::endl;
   }
 
   file.close();
+  std::cout << "Total words inserted: " << word_count << std::endl;
 }
 
 void printFreq(BST<std::string>& tree) {
